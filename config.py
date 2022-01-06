@@ -15,5 +15,5 @@ header_values = {
     }
 
 csv_folder = (r"E:\Personal Projects\scraper2\CSV storage")
-USER_NAME = "pricelookup.tool@gmail.com"
-USER_PASS = "pricelookup.tool1994"
+USER_NAME = ""
+USER_PASS = ""
