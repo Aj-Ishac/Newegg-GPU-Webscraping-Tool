@@ -1,4 +1,4 @@
-from operator import add
+from operator import add, truediv
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -23,7 +23,8 @@ def output_data():
         print("-----------")        
 
         writetocsv([date_stamp, time_stamp, f"${item[1]['price']}", item[1]['link'], item[0]], abs_file_path)
-
+    
+    if email_confirmation == True:
         if item[1]['price'] < price_threshold:
             sendmail(subject, body + body_extended)
 
@@ -32,7 +33,7 @@ def writetocsv(values, search_term):
     csvfile = open(search_term, "a", newline="")
     writer = csv.writer(csvfile)
     writer.writerow(values)
-    csvfile.close   
+    csvfile.close  
 
 def sendmail(subject, body):
     smtp = smtplib.SMTP("smtp.gmail.com",587)
@@ -41,18 +42,22 @@ def sendmail(subject, body):
     try:
         smtp.login(config.USER_NAME, config.USER_PASS)
         message_body = f"Subject:{subject}\n\n{body}"
-        smtp.sendmail(config.USER_NAME, config.USER_NAME, message_body)
+        smtp.sendmail(config.USER_NAME, email_tosend, message_body)
         smtp.quit()
     except:
+        email_confirmation == False
         smtp.quit()
 
 def get_html(url: str):
     response = requests.get(address, headers=config.header_values)
     return response.text
 
-search_term = input("Input graphic card to search: ")
-price_threshold = int(input("Email price threshold: "))
-time_wait_secs = int(input("Input Search Repeat Timer in seconds: "))
+search_term = input("GPU Search Input: ")
+price_threshold = int(input("Price Threshold: "))
+email_tosend = input("Email for Alerts: ")
+time_wait_secs = int(input("Repeat Timer (secs): "))
+
+email_confirmation = True
 
 if __name__ == '__main__':
     
@@ -104,9 +109,17 @@ if __name__ == '__main__':
         try:
             smtp = smtplib.SMTP("smtp.gmail.com",587)
             smtp.login(config.USER_NAME, config.USER_PASS)
-        except:
-            print ("Invalid Credentials! Cannot use Email Alerts.")
+            print ("Invalid Credentials! Check config.py for credentials.")
 
-        #time_wait_secs = 20
-        print(f"Restarting in {time_wait_secs} seconds..")
-        time.sleep(time_wait_secs)
+            if time_wait_secs > 60:
+                print(f"Restarting in {time_wait_secs/60} minute(s)..")
+            else:
+                print(f"Restarting in {time_wait_secs} seconds..")
+            time.sleep(time_wait_secs)
+                   
+        except Exception:    
+            if time_wait_secs > 60:
+                print(f"Restarting in {'{:.2f}'.format(time_wait_secs/60)} minute(s)..")
+            else:
+                print(f"Restarting in {time_wait_secs} seconds..")
+            time.sleep(time_wait_secs)
