@@ -51,9 +51,8 @@ def get_html(url: str):
     return response.text
 
 search_term = input("Input graphic card to search: ")
-#price_threshold = input("Email price threshold: ")
-price_threshold = 1135
-
+price_threshold = int(input("Email price threshold: "))
+time_wait_secs = int(input("Input Search Repeat Timer in seconds: "))
 
 if __name__ == '__main__':
     
@@ -108,6 +107,6 @@ if __name__ == '__main__':
         except:
             print ("Invalid Credentials! Cannot use Email Alerts.")
 
-        time_wait_secs = 20
-        print(f"Restarting in {time_wait_secs/60} minute(s)..")
+        #time_wait_secs = 20
+        print(f"Restarting in {time_wait_secs} seconds..")
         time.sleep(time_wait_secs)
