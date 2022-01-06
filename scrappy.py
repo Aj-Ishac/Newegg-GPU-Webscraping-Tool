@@ -28,6 +28,7 @@ def output_data():
             sendmail(subject, body + body_extended)
 
 def writetocsv(values, search_term):
+      
     csvfile = open(search_term, "a", newline="")
     writer = csv.writer(csvfile)
     writer.writerow(values)
@@ -57,6 +58,12 @@ price_threshold = 1135
 if __name__ == '__main__':
     
     while True:
+
+        try:
+            os.remove(abs_file_path)
+        except Exception:
+            pass
+
         address = f"https://www.newegg.com/p/pl?SrchInDesc={search_term}&N=100007709%204131"
         page = get_html(address)
         doc = BeautifulSoup(page, "html.parser")
@@ -101,6 +108,6 @@ if __name__ == '__main__':
         except:
             print ("Invalid Credentials! Cannot use Email Alerts.")
 
-        time_wait_secs = 60
+        time_wait_secs = 20
         print(f"Restarting in {time_wait_secs/60} minute(s)..")
         time.sleep(time_wait_secs)
