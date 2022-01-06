@@ -1,6 +1,6 @@
-# Price-Webscraping-Tool
+# Newegg-GPU-Webscraping-Tool
 
-Python based project is designed to retrieve product information from popular online shopping websites based on user-input.
+Python based project is designed to retrieve Graphic Card product information from Newegg based on user-input.
 Extracted data will be later fed to the Data-Processing-And-Lookup-Tool to analyze and streamline decision making on the user's part.
 
 The program will be responsible for the following processes:
