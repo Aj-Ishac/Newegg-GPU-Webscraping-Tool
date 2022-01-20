@@ -6,14 +6,13 @@ Extracted data will be later fed to the Data-Processing-And-Lookup-Tool to analy
 User-Input:
   1. Search Term.
   2. Price threshold to be emailed.
-  3. Email to send alerts to.
+  3. Email to send alerts to (Setup in the config.py file).
   4. Time to repeat.
 
 The program will be responsible for the following processes:
   1. Extract title, price, and link of all products found from the website based on user-input search term.
   2. Output all extracted data of value into a CSV file to be handled by the Data-Processing-And-Lookup-Tool.
-  3. (WIP) Email notification when price is within range of the user's choice.
-  4. (WIP) Config for multiple products/website scraping and how often the program will run.
-  5. (WIP) Seamless communication between Price-Webscraping-Tool and Data-Processing-And-Lookup-Tool.
+  3. Email notification when price is within range of the user's choice.
+  4. Seamless communication between Price-Webscraping-Tool and Data-Processing-And-Lookup-Tool-v2
 
   
