@@ -17,12 +17,13 @@ def output_data():
 
         body_extended = f"{item[0]} \n{item[1]['link']}\nPrice: ${item[1]['price']}\n\nThank you for using Pricelookup.tool"
 
-        print(item[0])
+        print(date_stamp)
+        print(item[0].replace(","," "))
         print(f"${item[1]['price']}")
         print(item[1]['link'])
         print("-----------")        
 
-        writetocsv([date_stamp, time_stamp, f"${item[1]['price']}", item[1]['link'], item[0]], abs_file_path)
+        writetocsv([date_stamp, item[1]['price'], item[1]['link'], item[0].replace(","," ")], abs_file_path)
     
     if email_confirmation == True:
         if item[1]['price'] < price_threshold:
@@ -102,8 +103,11 @@ if __name__ == '__main__':
         abs_file_path = os.path.join(config.csv_folder, search_term + ".csv") 
         date_stamp = datetime.datetime.now().date()
         time_stamp = datetime.datetime.now().time()
+        
+        #date_format = datetime.strptime(date_stamp, '%d/%m/%Y')
 
-        writetocsv(["Date","Time","Price", "Source", "Name"], abs_file_path)
+        
+        #writetocsv(["Date", "Price", "Source", "Product Name"], abs_file_path)
         output_data()
 
         try:
