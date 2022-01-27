@@ -26,7 +26,7 @@ def output_data():
         writetocsv([date_stamp, item[1]['price'], item[1]['link'], item[0].replace(","," ")], abs_file_path)
     
     if email_confirmation == True:
-        if item[1]['price'] < price_threshold:
+        if item[1]['price'] < config.price_threshold:
             sendmail(subject, body + body_extended)
 
 def writetocsv(values, search_term):
@@ -41,9 +41,9 @@ def sendmail(subject, body):
     smtp.ehlo()
     smtp.starttls()
     try:
-        smtp.login(config.USER_NAME, config.USER_PASS)
+        smtp.login(config.USER_NAME_send, config.USER_PASS_send)
         message_body = f"Subject:{subject}\n\n{body}"
-        smtp.sendmail(config.USER_NAME, email_tosend, message_body)
+        smtp.sendmail(config.USER_NAME_receive, config.email_tosend, message_body)
         smtp.quit()
     except:
         email_confirmation == False
@@ -54,9 +54,9 @@ def get_html(url: str):
     return response.text
 
 search_term = input("GPU Search Input: ")
-price_threshold = int(input("Price Threshold: "))
-email_tosend = input("Email for Alerts: ")
-time_wait_secs = int(input("Repeat Timer (secs): "))
+#price_threshold = int(input("Price Threshold: "))
+#email_tosend = input("Email for Alerts: ")
+#time_wait_secs = int(input("Repeat Timer (secs): "))
 
 email_confirmation = True
 
@@ -95,7 +95,6 @@ if __name__ == '__main__':
                 try:
                     price = next_parent.find(class_="price-current").find("strong").string
                     items_found[item] = {"price": int(price.replace(",","")), "link": link}
-                    #[("3080 FTW", {'price':2999, "link":"www"})]
                 except:
                     pass
             
@@ -103,27 +102,23 @@ if __name__ == '__main__':
         abs_file_path = os.path.join(config.csv_folder, search_term + ".csv") 
         date_stamp = datetime.datetime.now().date()
         time_stamp = datetime.datetime.now().time()
-        
-        #date_format = datetime.strptime(date_stamp, '%d/%m/%Y')
 
-        
-        #writetocsv(["Date", "Price", "Source", "Product Name"], abs_file_path)
         output_data()
 
         try:
             smtp = smtplib.SMTP("smtp.gmail.com",587)
-            smtp.login(config.USER_NAME, config.USER_PASS)
+            smtp.login(config.USER_NAME_send, config.USER_PASS_send)
             print ("Invalid Credentials! Check config.py for credentials.")
 
-            if time_wait_secs > 60:
-                print(f"Restarting in {time_wait_secs/60} minute(s)..")
+            if config.time_wait_secs > 60:
+                print(f"Restarting in {config.time_wait_secs/60} minute(s)..")
             else:
-                print(f"Restarting in {time_wait_secs} seconds..")
-            time.sleep(time_wait_secs)
+                print(f"Restarting in {config.time_wait_secs} seconds..")
+            time.sleep(config.time_wait_secs)
                    
         except Exception:    
-            if time_wait_secs > 60:
-                print(f"Restarting in {'{:.2f}'.format(time_wait_secs/60)} minute(s)..")
+            if config.time_wait_secs > 60:
+                print(f"Restarting in {'{:.2f}'.format(config.time_wait_secs/60)} minute(s)..")
             else:
-                print(f"Restarting in {time_wait_secs} seconds..")
-            time.sleep(time_wait_secs)
+                print(f"Restarting in {config.time_wait_secs} seconds..")
+            time.sleep(config.time_wait_secs)
